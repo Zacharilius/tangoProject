@@ -12,12 +12,16 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+TEMPLATE_PATH = os.path.join(BASE_DIR, 'templates')
+TEMPLATE_DIRS = [
+    TEMPLATE_PATH,
+]
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '&h+00o_=i1er#60s*!1dt7z$-ptd7rj0krq9_p%_dm$s@kt)7w'
+SECRET_KEY = '##)dc5@te*8uzto9=&@adae#cn^i^0hny%phr=%fm1o7vm+2f0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -36,6 +40,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rango',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -81,3 +86,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_PATH = os.path.join(BASE_DIR, 'static')
+
+STATICFILES_DIRS = (
+    STATIC_PATH,
+)
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # Absolute path to the media directory
