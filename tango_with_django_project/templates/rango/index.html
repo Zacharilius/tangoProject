@@ -1,35 +1,24 @@
 <!DOCTYPE html>
+
+{% load staticfiles %}
+
 <html>
-    <head>
-        <title>Rango</title>
-    </head>
+	<head>
+		<title>Rango</title>
+	</head>
 
-    <body>
-        <h1>Rango says..hello world!</h1>
-
-        {% if categories %}
-            <ul>
-                {% for category in categories %}
-                <!-- Following line changed to add an HTML hyperlink -->
-                <li><a href="/rango/category/{{ category.slug }}">{{ category.name }}</a></li>
-                {% endfor %}
-            </ul>
-       {% else %}
-            <strong>There are no categories present.</strong>
-       {% endif %}
-
-       {% if pages %}
-            <ul>
-                {% for page in pages %}
-                <!-- Following line changed to add an HTML hyperlink -->
-                <li>{{ page.title }}</li>
-                <li>{{ page.views }}</li>
-                {% endfor %}
-            </ul>
-       {% else %}
-            <strong>There are no categories present.</strong>
-       {% endif %}
-
-    </body>
+	<body>
+		<h1>Rango says...</h1>
+		<a href="/rango/about/">About</a><br/>
+		<img src="{% static "images/cat.jpg" %}" alt="Cat pic"/>
+		{% if categories %}
+			<ul>
+				{% for category in categories %}
+				<li>{{ category.name }}</li>
+				{% endfor %}
+			</ul>
+		{% else %}
+			<strong>There are no categories present.</strong>
+		{% endif %}
+	</body>
 </html>
-
