@@ -1,0 +1,319 @@
+.\" Man page generated from reStructuredText.
+.
+.TH "BPYTHON-CONFIG" "5" "March 14, 2015" "mercurial" "bpython"
+.SH NAME
+bpython-config \- user configuration file for bpython
+.
+.nr rst2man-indent-level 0
+.
+.de1 rstReportMargin
+\\$1 \\n[an-margin]
+level \\n[rst2man-indent-level]
+level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
+-
+\\n[rst2man-indent0]
+\\n[rst2man-indent1]
+\\n[rst2man-indent2]
+..
+.de1 INDENT
+.\" .rstReportMargin pre:
+. RS \\$1
+. nr rst2man-indent\\n[rst2man-indent-level] \\n[an-margin]
+. nr rst2man-indent-level +1
+.\" .rstReportMargin post:
+..
+.de UNINDENT
+. RE
+.\" indent \\n[an-margin]
+.\" old: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.nr rst2man-indent-level -1
+.\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.in \\n[rst2man-indent\\n[rst2man-indent-level]]u
+..
+.SH SYNOPSIS
+.sp
+\fB$XDG_CONFIG_HOME/bpython/config\fP
+.SH DESCRIPTION
+.sp
+The configuration file contains various options controlling the behaviour of
+\fBbpython\fP\&.
+.SH GENERAL
+.sp
+This refers to the \fB[general]\fP section in your
+\fI$XDG_CONFIG_HOME/bpython/config\fP file.
+.SS auto_display_list
+.sp
+Display the autocomplete list as you type (default: True).
+When this is off, you can hit tab to see the suggestions.
+.SS autocomplete_mode
+.sp
+There are three modes for autocomplete. simple, substring, and fuzzy.  Simple
+matches methods with a common prefix, substring matches methods with a common
+subsequence, and fuzzy matches methods with common characters (default: simple).
+.sp
+New in version 0.12.
+
+.SS syntax
+.sp
+Syntax highlighting as you type (default: True).
+.SS arg_spec
+.sp
+Display the arg spec (list of arguments) for callables, when possible (default:
+True).
+.SS hist_file
+.sp
+History file (default: \fB~/.pythonhist\fP).
+.SS paste_time
+.sp
+The time between lines before pastemode is activated in seconds (default: 0.02).
+.SS hist_length
+.sp
+Number of lines to store in history (set to 0 to disable) (default: 100)
+.SS tab_length
+.sp
+Soft tab size (default 4, see pep\-8)
+.SS pastebin_url
+.sp
+The pastebin url to post to (without a trailing slash). This pastebin has to be
+a pastebin which uses LodgeIt. Examples are: \fI\%http://paste.pocoo.org/xmlrpc/\fP and
+\fI\%http://bpaste.net/xmlrpc/\fP (default: \fI\%http://bpaste.net/xmlrpc/\fP)
+.SS pastebin_private
+.sp
+If the pastebin supports a private option to make a random paste id, use it.
+Default: True).
+.sp
+New in version 0.12.
+
+.SS pastebin_show_url
+.sp
+The url under which the new paste can be reached. \fB$paste_id\fP will be replaced
+by the ID of the new paste. Examples are: \fI\%http://bpaste.net/show/$paste_id/\fP and
+\fI\%http://paste.pocoo.org/show/$paste_id/\fP (default:
+\fI\%http://bpaste.net/show/$paste_id/\fP)
+.SS pastebin_helper
+.sp
+The name of a helper executable that should perform pastebin upload on bpython\(aqs
+behalf. If set, this overrides \fIpastebin_url\fP\&. It also overrides
+\fIpastebin_show_url\fP, as the helper is expected to return the full URL to the
+pastebin as the first word of its output. The data is supplied to the helper via
+STDIN.
+.sp
+An example helper program is \fBpastebinit\fP, available for most systems. The
+following helper program can be used to create \fI\%gists\fP:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+#!/usr/bin/env python
+
+import sys
+import urllib2
+import json
+
+def do_gist_json(s):
+    """ Use json to post to github. """
+    gist_public = False
+    gist_url = \(aqhttps://api.github.com/gists\(aq
+
+    data = {\(aqdescription\(aq: None,
+            \(aqpublic\(aq: None,
+            \(aqfiles\(aq : {
+                \(aqsample\(aq: { \(aqcontent\(aq: None }
+            }}
+    data[\(aqdescription\(aq] = \(aqGist from BPython\(aq
+    data[\(aqpublic\(aq] = gist_public
+    data[\(aqfiles\(aq][\(aqsample\(aq][\(aqcontent\(aq] = s
+
+    req = urllib2.Request(gist_url, json.dumps(data), {\(aqContent\-Type\(aq: \(aqapplication/json\(aq})
+    try:
+        res = urllib2.urlopen(req)
+    except HTTPError, e:
+        return e
+
+    try:
+        json_res = json.loads(res.read())
+        return json_res[\(aqhtml_url\(aq]
+    except HTTPError, e:
+        return e
+
+if __name__ == "__main__":
+  s = sys.stdin.read()
+  print do_gist_json(s)
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+New in version 0.12.
+
+.SS color_scheme
+.sp
+See \fIthemes\fP for more information.
+.sp
+Color schemes should be put in \fB$XDG_CONFIG_HOME/bpython/\fP\&. For example, to
+use the theme \fB$XDG_CONFIG_HOME/bpython/foo.theme\fP set \fBcolor_scheme = foo\fP
+.sp
+Leave blank or set to "default" to use the default (builtin) theme.
+.SS flush_output
+.sp
+Whether to flush all output to stdout on exit (default: True).
+.SS save_append_py
+.sp
+Whether to append \fB\&.py\fP to the filename while saving the input to a file.
+.sp
+New in version 0.13.
+
+.SS editor
+.sp
+Editor for externally editing the current line.
+.sp
+New in version 0.13.
+
+.SH KEYBOARD
+.sp
+This section refers to the \fB[keyboard]\fP section in your
+\fB$XDG_CONFIG_HOME/bpython/config\fP\&.
+.sp
+You can set various keyboard shortcuts to be used by bpython. However, we have
+yet to map all keys to their respective control codes. If you configure a key
+combination which is not yet supported by bpython it will raise an exception
+telling you the key does not exist in bpython.keys.
+.sp
+Valid keys are:
+.INDENT 0.0
+.IP \(bu 2
+Control + any alphanumeric character (C\-a through A\-z, also a few others).
+.IP \(bu 2
+Any function key ranging from F1 to F12.
+.UNINDENT
+.SS pastebin
+.sp
+Default: <F8>
+.SS last_output
+.sp
+Default: F9
+.sp
+Shows the last output in the systems $PAGER.
+.SS save
+.sp
+Default: C\-s
+.sp
+Saves the current session to a file (prompts for filename)
+.SS undo
+.sp
+Default: C\-r
+.sp
+Rewinds the last action.
+.SS up_one_line
+.sp
+Default: C\-p
+.sp
+Move the cursor up, by one line.
+.SS down_one_line
+.sp
+Default: C\-n
+.sp
+Move the cursor down, by one line.
+.SS cut_to_buffer
+.sp
+Default: C\-k
+.sp
+Cuts the current line to the buffer.
+.SS search
+.sp
+Default: C\-o
+.sp
+Search up for any lines containing what is on the current line.
+.SS yank_from_buffer
+.sp
+Default: C\-y
+.sp
+Pastes the current line from the buffer (the one you previously cutted)
+.SS clear_word
+.sp
+Default: C\-w
+.sp
+Clear the word the cursor is currently on.
+.SS clear_line
+.sp
+Default: C\-u
+.sp
+Clears to the beginning of the line.
+.SS clear_screen
+.sp
+Default: C\-l
+.sp
+Clears the screen to the top.
+.SS show_source
+.sp
+Default: F2
+.sp
+Shows the source of the currently being completed (python) function.
+.SS exit
+.sp
+Default: C\-d
+.sp
+Exits bpython (use on empty line)
+.SS external_editor
+.sp
+Default: F7
+.sp
+Edit current line in an external editor.
+.sp
+New in version 0.13.
+
+.SH CLI
+.sp
+This refers to the \fB[cli]\fP section in your config file.
+.SS suggestion_width
+.sp
+Default: 0.8
+.sp
+The width of the suggestion window in percent of the terminal width.
+.sp
+New in version 0.9.8.
+
+.SS trim_prompts
+.sp
+Default: False
+.sp
+Trims lines starting with \(aq>>> \(aq when set to True.
+.SH GTK
+.sp
+This refers to the \fB[gtk]\fP section in your \fI$XDG_CONFIG_HOME/bpython/config\fP
+file.
+.SS font
+.sp
+Default: Monospace 10
+.sp
+The font to be used by the GTK version.
+.SH CURTSIES
+.sp
+This refers to the \fB[curtsies]\fP section in your config file.
+.sp
+New in version 0.13.
+
+.SS fill_terminal
+.sp
+Default: False
+.sp
+Whether bpython should clear the screen on start, and always display a status
+bar at the bottom.
+.SS list_above
+.sp
+Default: False
+.sp
+When there is space above the current line, whether the suggestions list will be
+displayed there instead of below the current line.
+.SH AUTHOR
+.sp
+\fBbpython\fP was written by Robert Anthony Farrell
+<\fI\%robertanthonyfarrel@gmail.com\fP> and his bunch of loyal followers.
+.sp
+This manual page was written by Jørgen Pedersen Tjernø <\fI\%jorgen@devsoft.no\fP>,
+for the Debian project (but may be used by others).
+.SH COPYRIGHT
+2008-2014 Bob Farrell, Andreas Stuehrk et al.
+.\" Generated by docutils manpage writer.
+.
