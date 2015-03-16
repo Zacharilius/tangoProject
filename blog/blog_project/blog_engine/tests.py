@@ -1,3 +1,4 @@
+import markdown2 as markdown
 from django.test import TestCase, LiveServerTestCase, Client
 from django.utils import timezone
 from blog_engine.models import Post
@@ -134,7 +135,7 @@ class PostViewTest(LiveServerTestCase):
 	def test_index(self):
 		post = Post()
 		post.title = 'My first post'
-		post.text = 'This is my first blog post'
+		post.text = 'This is [my first blog post](http://127.0.0.1:8000/)'
 		post.pub_date = timezone.now()
 		post.save()
 
@@ -153,4 +154,5 @@ class PostViewTest(LiveServerTestCase):
 		self.assertTrue(str(post.pub_date.day) in response.content)
 
 
+		self.assertTrue('<a href="http://127.0.0.1:8000/">my first blog post</a>' in response.content)
 
