@@ -1,0 +1,22 @@
+{
+  "name": "blog_project",
+  "version": "0.0.0",
+  "homepage": "https://github.com/Zacharilius/tangoProject",
+  "authors": [
+    "zacharilius <zabensley@gmail.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "blog_engine/static/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.4",
+    "html5-boilerplate": "~5.0.0"
+  }
+}
